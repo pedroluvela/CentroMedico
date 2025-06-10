@@ -1,0 +1,86 @@
+﻿@model CentroMedico.Models.Medico
+
+@{
+    ViewData["Title"] = "Registrar Médico";
+}
+
+<h2>Registrar Médico</h2>
+
+<form asp-action="Crear" method="post" onsubmit="return validarFormularioMedico();">
+    <label>Nombre Completo:</label>
+    <input asp-for="NombreCompleto" class="form-control" required />
+
+    <label>Fecha de Nacimiento:</label>
+    <input type="date" asp-for="FechaNacimiento" class="form-control" required />
+
+    <label>DPI:</label>
+    <input asp-for="DPI" class="form-control" required onblur="autogenerarCodigo()" />
+
+    <label for="Sexo">Sexo:</label>
+    <select id="Sexo" name="Sexo" class="form-control" required>
+        <option value="">-- Seleccione --</option>
+        <option value="M">Masculino</option>
+        <option value="F">Femenino</option>
+    </select>
+
+    <label>Número de Colegiado:</label>
+    <input asp-for="Colegiado" class="form-control" required />
+
+    <label>Código de Verificación:</label>
+    <input asp-for="CodigoVerificacion" class="form-control" readonly />
+
+    <div class="form-group">
+        <label>Especialidad:</label>
+        <select asp-for="EspecialidadId" class="form-control" asp-items="ViewBag.EspecialidadId" required>
+            <option value="">-- Seleccione una Especialidad --</option>
+        </select>
+        <span asp-validation-for="EspecialidadId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Sub Especialidad:</label>
+        <select asp-for="SubespecialidadId" class="form-control" asp-items="ViewBag.SubespecialidadId" required>
+            <option value="">-- Seleccione una Especialidad --</option>
+        </select>
+        <span asp-validation-for="SubespecialidadId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Jefe inmediato:</label>
+        <select asp-for="JefeInmediatoId" class="form-control" asp-items="ViewBag.JefeInmediatoId" required>
+            <option value="">-- Seleccione una Especialidad --</option>
+        </select>
+        <span asp-validation-for="JefeInmediatoId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+@section Scripts {
+    <script>
+        function validarFormularioMedico() {
+            const dpi = document.getElementById("DPI").value;
+            const fecha = document.getElementById("FechaNacimiento").value;
+
+            if (!/^\d{4}\d{5}\d{4}$/.test(dpi)) {
+                alert("DPI inválido");
+                return false;
+            }
+
+            // if (!/^\d{8}$/.test(fecha)) {
+            //     alert("Fecha inválida");
+            //     return false;
+            // }
+
+            return true;
+        }
+
+        function autogenerarCodigo() {
+            let dpi = document.getElementById("DPI").value.replace(/\s/g, "");
+            if (dpi.length !== 13) return;
+            let digitos = dpi.split('').map(Number);
+            let mayores = digitos.sort((a, b) => b - a).slice(0, 4);
+            document.getElementById("CodigoVerificacion").value = mayores.join('');
+        }
+    </script>
+}

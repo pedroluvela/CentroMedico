@@ -1,0 +1,65 @@
+﻿@model IEnumerable<CentroMedico.Models.Cita>
+@using System.Globalization;
+@{
+    ViewData["Title"] = "Listado de Citas";
+}
+
+<h1>Listado de Citas</h1>
+
+<p>
+    <a asp-action="Crear" class="btn btn-primary">
+        <i class="fas fa-user-plus"></i> Crear Nueva Cita
+    </a>
+</p>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<table class="table table-striped table-bordered mt-3">
+    <thead class="thead-dark">
+        <tr>
+            <th>Paciente</th>
+            <th>Médico</th>
+            <th>Inicio de cita</th>
+            <th>Fin de cita</th>
+            <th>Estado de cita</th>
+            <th>Próxima cita</th>
+            <th>Anexos</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Paciente.NombreCompleto</td>
+                <td>@item.Medico.NombreCompleto</td>
+                <td>@item.FechaHoraInicio.ToString("MM/dd/yyyy h:mm tt")</td>
+                <td>@item.FechaHoraFin.ToString("MM/dd/yyyy h:mm tt")</td>
+                <td>@item.EstadoCita.Descripcion</td>
+                <td>
+                    @if (item.FechaProximaCita.HasValue)
+                    {
+                        @item.FechaProximaCita.Value.ToString("MM/dd/yyyy h:mm tt")
+                    }
+                    else
+                    {
+                        <span></span>
+                    }
+                </td>
+                <td>
+                    @if (item.Anexos != null && item.Anexos.Any())
+                    {
+                        <a asp-action="VerAnexos" asp-route-id="@item.CodigoCita" class="btn btn-info btn-sm">Ver Anexos</a>
+                    }                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

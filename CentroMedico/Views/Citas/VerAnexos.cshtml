@@ -1,0 +1,39 @@
+﻿@model CentroMedico.Models.Cita
+
+@{
+    ViewBag.Title = "Anexos de la Cita";
+}
+
+<h2>Anexos de la Cita @Model.CodigoCita</h2>
+<p><strong>Paciente:</strong> @Model.Paciente.NombreCompleto</p>
+<p><strong>Fecha de la Cita:</strong> @Model.FechaHoraInicio.ToString("g")</p>
+
+@if (Model.Anexos == null || !Model.Anexos.Any())
+{
+    <p><i>No hay anexos para esta cita.</i></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Archivo</th>
+                <th>Tipo</th>
+                <th>Vista</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var anexo in Model.Anexos)
+            {
+                <tr>
+                    <td>@anexo.NombreArchivo</td>
+                    <td>@anexo.TipoContenido</td>
+                    <td>
+                        <a href="@anexo.RutaArchivo" target="_blank" class="btn btn-sm btn-primary">Ver</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<a asp-action="Index" class="btn btn-secondary">Regresar</a>

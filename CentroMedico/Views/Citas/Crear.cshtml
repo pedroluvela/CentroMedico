@@ -1,0 +1,78 @@
+﻿@model CentroMedico.Models.Cita
+
+@{
+    ViewData["Title"] = "Registrar Cita";
+}
+
+<h2>Registrar Cita</h2>
+
+<form asp-action="Crear" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Paciente:</label>
+        <select asp-for="CodigoPaciente" class="form-control" asp-items="ViewBag.Pacientes" required>
+            <option value="">-- Seleccione un paciente --</option>
+        </select>
+        <span asp-validation-for="CodigoPaciente" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Médico:</label>
+        <select asp-for="CodigoMedico" class="form-control" asp-items="ViewBag.Medicos" required>
+            <option value="">-- Seleccione un médico --</option>
+        </select>
+        <span asp-validation-for="CodigoMedico" class="text-danger"></span>
+    </div>
+
+    <label>Fecha y hora de inicio:</label>
+    <input type="datetime-local" asp-for="FechaHoraInicio" class="form-control" required />
+
+    <label>Fecha y hora fin:</label>
+    <input type="datetime-local" asp-for="FechaHoraFin" class="form-control" required />
+
+    <div class="form-group">
+        <label>Estado de cita:</label>
+        <select asp-for="CodigoEstadoCita" class="form-control" asp-items="ViewBag.Estados" required>
+            <option value="">-- Seleccione estado --</option>
+        </select>
+        <span asp-validation-for="CodigoEstadoCita" class="text-danger"></span>
+    </div>
+
+    <label>Próxima cita:</label>
+    <input type="datetime-local" asp-for="FechaProximaCita" class="form-control" required />
+
+    <div class="form-group">
+        <label>Anexos (puede seleccionar múltiples archivos):</label>
+        <input type="file" name="archivos" multiple class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+@section Scripts {
+    <script>
+        function validarFormularioMedico() {
+            const dpi = document.getElementById("DPI").value;
+            const fecha = document.getElementById("FechaNacimiento").value;
+
+            if (!/^\d{4}\d{5}\d{4}$/.test(dpi)) {
+                alert("DPI inválido");
+                return false;
+            }
+
+            // if (!/^\d{8}$/.test(fecha)) {
+            //     alert("Fecha inválida");
+            //     return false;
+            // }
+
+            return true;
+        }
+
+        function autogenerarCodigo() {
+            let dpi = document.getElementById("DPI").value.replace(/\s/g, "");
+            if (dpi.length !== 13) return;
+            let digitos = dpi.split('').map(Number);
+            let mayores = digitos.sort((a, b) => b - a).slice(0, 4);
+            document.getElementById("CodigoVerificacion").value = mayores.join('');
+        }
+    </script>
+}

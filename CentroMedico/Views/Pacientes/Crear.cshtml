@@ -1,0 +1,48 @@
+﻿@model CentroMedico.Models.Paciente
+
+@{
+    ViewData["Title"] = "Registrar Paciente";
+}
+
+<h2>Registrar Paciente</h2>
+
+<form asp-action="Crear" method="post" onsubmit="return validarFormularioPaciente();">
+    <label>Nombre Completo:</label>
+    <input asp-for="NombreCompleto" class="form-control" required />
+
+    <label>Fecha de Nacimiento:</label>
+    <input type="date" asp-for="FechaNacimiento" class="form-control" required />
+
+    <label>DPI:</label>
+    <input asp-for="DPI" class="form-control" required maxlength="13"/>
+
+    <label for="Sexo">Sexo:</label>
+    <select id="Sexo" name="Sexo" class="form-control" required>
+        <option value="">-- Seleccione --</option>
+        <option value="M">Masculino</option>
+        <option value="F">Femenino</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+@section Scripts {
+    <script>
+        function validarFormularioPaciente() {
+            const dpi = document.getElementById("DPI").value;
+            const fecha = document.getElementById("FechaNacimiento").value;
+
+            if (!/^\d{4}\d{5}\d{4}$/.test(dpi)) {
+                alert("DPI inválido");
+                return false;
+            }
+
+            // if (!/^\d{8}$/.test(fecha)) {
+            //     alert("Fecha inválida");
+            //     return false;
+            // }
+
+            return true;
+        }
+    </script>
+}
