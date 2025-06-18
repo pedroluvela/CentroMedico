@@ -8,13 +8,13 @@
 
 <form asp-action="Crear" method="post" onsubmit="return validarFormularioPaciente();">
     <label>Nombre Completo:</label>
-    <input asp-for="NombreCompleto" class="form-control" required />
+    <input asp-for="NombreCompleto" class="form-control" required oninput="validarAlfanumerico(this)" />
 
     <label>Fecha de Nacimiento:</label>
     <input type="date" asp-for="FechaNacimiento" class="form-control" required />
 
     <label>DPI:</label>
-    <input asp-for="DPI" class="form-control" required maxlength="13"/>
+    <input asp-for="DPI" class="form-control" required maxlength="13" oninput="validarNumerico(this)" />
 
     <label for="Sexo">Sexo:</label>
     <select id="Sexo" name="Sexo" class="form-control" required>
@@ -43,6 +43,14 @@
             // }
 
             return true;
+        }
+
+        function validarAlfanumerico(inputElement) {
+            inputElement.value = inputElement.value.replace(/[^a-zA-Z0-9 ]/g, '');
+        }
+
+        function validarNumerico(inputElement) {
+            inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
         }
     </script>
 }

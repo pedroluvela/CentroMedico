@@ -8,13 +8,13 @@
 
 <form asp-action="Crear" method="post" onsubmit="return validarFormularioMedico();">
     <label>Nombre Completo:</label>
-    <input asp-for="NombreCompleto" class="form-control" required />
+    <input asp-for="NombreCompleto" class="form-control" required oninput="validarAlfanumerico(this)" />
 
     <label>Fecha de Nacimiento:</label>
     <input type="date" asp-for="FechaNacimiento" class="form-control" required />
 
     <label>DPI:</label>
-    <input asp-for="DPI" class="form-control" required onblur="autogenerarCodigo()" />
+    <input asp-for="DPI" class="form-control" required onblur="autogenerarCodigo()" maxlength="13" oninput="validarNumerico(this)" />
 
     <label for="Sexo">Sexo:</label>
     <select id="Sexo" name="Sexo" class="form-control" required>
@@ -24,7 +24,7 @@
     </select>
 
     <label>Número de Colegiado:</label>
-    <input asp-for="Colegiado" class="form-control" required />
+    <input asp-for="Colegiado" class="form-control" required oninput="validarAlfanumerico(this)" />
 
     <label>Código de Verificación:</label>
     <input asp-for="CodigoVerificacion" class="form-control" readonly />
@@ -39,7 +39,7 @@
 
     <div class="form-group">
         <label>Sub Especialidad:</label>
-        <select asp-for="SubespecialidadId" class="form-control" asp-items="ViewBag.SubespecialidadId" required>
+        <select asp-for="SubespecialidadId" class="form-control" asp-items="ViewBag.SubespecialidadId">
             <option value="">-- Seleccione una Especialidad --</option>
         </select>
         <span asp-validation-for="SubespecialidadId" class="text-danger"></span>
@@ -47,7 +47,7 @@
 
     <div class="form-group">
         <label>Jefe inmediato:</label>
-        <select asp-for="JefeInmediatoId" class="form-control" asp-items="ViewBag.JefeInmediatoId" required>
+        <select asp-for="JefeInmediatoId" class="form-control" asp-items="ViewBag.JefeInmediatoId">
             <option value="">-- Seleccione una Especialidad --</option>
         </select>
         <span asp-validation-for="JefeInmediatoId" class="text-danger"></span>
@@ -81,6 +81,14 @@
             let digitos = dpi.split('').map(Number);
             let mayores = digitos.sort((a, b) => b - a).slice(0, 4);
             document.getElementById("CodigoVerificacion").value = mayores.join('');
+        }
+
+        function validarAlfanumerico(inputElement) {
+            inputElement.value = inputElement.value.replace(/[^a-zA-Z0-9 ]/g, '');
+        }
+
+        function validarNumerico(inputElement) {
+            inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
         }
     </script>
 }
